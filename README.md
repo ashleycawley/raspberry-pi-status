@@ -1,6 +1,6 @@
 Author: Ashley Cawley // @ashleycawley
 
-This script is designed to get the client computer (Raspberry Pie) to publish
+This script is designed to get the client computer (Raspberry Pi) to publish
 its status to a central (web) server, with the idea of multiple different systems
 all publishing their status to that central server so that the Administrator has
 one easy place to view the general health and uptime of the systems or IOT devices.
