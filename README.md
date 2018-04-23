@@ -1,4 +1,5 @@
-Author: Ashley Cawley // @ashleycawley
+# Raspberry Pi Status Updater
+## Author: Ashley Cawley // @ashleycawley
 
 This script is designed to get the client computer (Raspberry Pi) to publish
 its status to a central (web) server, with the idea of multiple different systems
