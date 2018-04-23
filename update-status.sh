@@ -1,16 +1,18 @@
 #!/bin/bash
-#
+
 # Author: Ashley Cawley // @ashleycawley // ash@ashleycawley.co.uk
-#
+
 ## Variables
-PROGNAME=update-status.sh
-PROGRAMPATH=/usr/local/bin
-TEMP=/tmp
-RANDOMDELAY=30
-REMOTESERVER="status.ashleycawley.co.uk"
-USERNAME=pistatus
-SERVERPATH="/home/$USERNAME/public_html/pies/"
+# User Editable Variables:
+REMOTESERVER="status.ashleycawley.co.uk" # The hostname of your Remote Web Server
+USERNAME=pistatus # This is the username on the Remote Server
+SERVERPATH="/home/$USERNAME/public_html/pies/" # This is the exact folder path to publish to on the remote server
+PROGRAMPATH=/usr/local/bin # The location of where the program is installed (it will install itself there)
+PROGNAME=update-status.sh # The name of the script, update as required if you rename it
+RANDOMDELAY=30 # Introduces a random delay between 0 and the number specified to avoid many systems uploading to the central server at the same time
 SLEEP="sleep 0"
+# Variables which should probably remain untouched:
+TEMP=/tmp
 WANIPLOOKUP="$(host myip.opendns.com resolver1.opendns.com | grep "myip.opendns.com has" | awk '{print $4}')"
 MAC=$(sudo cat /sys/class/net/wlan0/address 2>/dev/null)
 TEMPLATE=('echo <html>
@@ -44,9 +46,9 @@ GPUTEMP
 </font>
 </body>
 </html>')
-#
+
 ## Functions
-#
+
 # Looks up the local IP address
 function LANIP {
 	hostname -I | awk '/192/ {print $1;}'
