@@ -18,8 +18,6 @@ An example of some of data the client system would publish would be:
 - GPU temperatures
 - Free disk space
 
-And likely more.
-
 ## Self Installer
 The Bash script contains a self-installer, it checks to see if it is already present
 in /usr/local/bin and if it is not then it copies itself to that location and then
