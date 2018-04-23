@@ -30,7 +30,7 @@ TEMPLATE=('echo <html>
 <font size="2">
 Reporting in on DATE</br></br>
 ONLINEFOR</br></br>
-<b>Load:</b> LOADAVG</br></br>
+<strong>Load:</strong> LOADAVG</br></br>
 <b>Users currently logged on:</b> USERSLOGGEDON</br></br>
 <b>LAN IP:</b> LOCALIP</br></br>
 <b>WAN IP:</b> WANIP</br></br>
