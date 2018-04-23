@@ -42,6 +42,5 @@ For this project to work you will need:
 wget https://raw.githubusercontent.com/ashleycawley/raspberry-pi-status/master/update-status.sh
 
 ### 2) Edit the update-status.sh script and configure the settings:
-
-REMOTESERVER="status.YourWebServer.co.uk" (The hostname of your Remote Web Server)
-USERNAME=pistatus (This is the username on the Remote Server)
+REMOTESERVER="status.YourWebServer.co.uk" - *Hostname of your Remote Web Server*
+USERNAME=pistatus *Username on your Remote Server*
