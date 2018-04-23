@@ -1,0 +1,10 @@
+# In order for the examples below to work the program (update-status.sh)
+# would have to be installed to /usr/local/bin/
+# If you run the program manually it will test that location to see if it
+# is present and if it is not it will install itself to that location.
+
+# To trigger the program to run every hour:
+0 * * * * bash /usr/local/bin/update-status.sh
+
+# To trigger the program to run every hour and enable logging:
+0 * * * * bash /usr/local/bin/update-status.sh >> ~/`hostname`-status.log
