@@ -1,5 +1,5 @@
 # Raspberry Pi Status Updater
-## Author: Ashley Cawley // [@ashleycawley](https://twitter.com/ashleycawley)
+### Author: Ashley Cawley // [@ashleycawley](https://twitter.com/ashleycawley)
 
 This script is designed to get the client computer (Raspberry Pi) to publish
 its status to a central (web) server, with the idea of multiple different systems
@@ -15,8 +15,9 @@ An example of some of data the client system would publish would be:
 - WAN IP Address
 - MAC Address
 - CPU Temperature
-- GPU temperatures,
+- GPU temperatures
 - Free disk space
+
 And likely more.
 
 ## Self Installer
