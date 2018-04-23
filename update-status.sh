@@ -2,16 +2,9 @@
 #
 # Author: Ashley Cawley // @ashleycawley // ash@ashleycawley.co.uk
 #
-# Description: This script is used to upload the status of a Raspberry Pi to a central
-# server to log things lke uptime, date, MAC Address, Load, Temperature and other statistics.
-# This script is designed to be run on multiple nodes concurrently and for them to upload
-# their statues to one central web server.
-#
 ## Variables
-#
 PROGNAME=update-status.sh
 PROGRAMPATH=/usr/local/bin
-PROJECTPATH="my-pi-toolkit/projects/pi-status"
 TEMP=/tmp
 RANDOMDELAY=30
 REMOTESERVER="status.ashleycawley.co.uk"
@@ -70,7 +63,7 @@ function INSTALLCRON {
         crontab -l > /tmp/crons
 
 	echo "Updating file to contain new CRON task..." && echo
-	echo "0 * * * * bash $PROGRAMPATH/$PROGNAME >> ~/$PROJECTPATH/logs/`hostname`-status.log" >> /tmp/crons
+	echo "0 * * * * bash $PROGRAMPATH/$PROGNAME" >> /tmp/crons
 
 	echo "Installing new CRON task file in to crontab" && echo
 	crontab /tmp/crons
@@ -117,7 +110,7 @@ until [ -e $PROGRAMPATH/$PROGNAME ]
 			sudo chmod +x $PROGRAMPATH/$PROGNAME
 			sleep 2 && echo
 
-			CREATELOGFOLDER # This function creates the log folder, the function is declared toward the top.
+			# CREATELOGFOLDER # This function creates the log folder, the function is declared toward the top.
 
 			echo "Installing CRON task..." && echo && sleep 2
 			INSTALLCRON # Uses the INSTALLCRON function which is declared toward the top of this script.
@@ -135,7 +128,7 @@ until [ -e $PROGRAMPATH/$PROGNAME ]
 
 echo "----------------------------------------------" && echo ""
 echo "Status Update Script Starting on `date`"
-CREATELOGFOLDER # This function creates the log folder, the function is declared toward the top.
+# CREATELOGFOLDER # This function creates the log folder, the function is declared toward the top.
 echo "" && $SLEEP
 
 
