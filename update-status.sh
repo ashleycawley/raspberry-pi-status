@@ -1,23 +1,18 @@
 #!/bin/bash
-#
+
 # Author: Ashley Cawley // @ashleycawley // ash@ashleycawley.co.uk
-#
-# Description: This script is used to upload the status of a Raspberry Pi to a central
-# server to log things lke uptime, date, MAC Address, Load, Temperature and other statistics.
-# This script is designed to be run on multiple nodes concurrently and for them to upload
-# their statues to one central web server.
-#
+
 ## Variables
-#
-PROGNAME=update-status.sh
-PROGRAMPATH=/usr/local/bin
-PROJECTPATH="my-pi-toolkit/projects/pi-status"
-TEMP=/tmp
-RANDOMDELAY=30
-REMOTESERVER="status.ashleycawley.co.uk"
-USERNAME=pistatus
-SERVERPATH="/home/$USERNAME/public_html/pies/"
+# User Editable Variables:
+REMOTESERVER="status.ashleycawley.co.uk" # The hostname of your Remote Web Server
+USERNAME=pistatus # This is the username on the Remote Server
+SERVERPATH="/home/$USERNAME/public_html/pies/" # This is the exact folder path to publish to on the remote server
+PROGRAMPATH=/usr/local/bin # The location of where the program is installed (it will install itself there)
+PROGNAME=update-status.sh # The name of the script, update as required if you rename it
+RANDOMDELAY=30 # Introduces a random delay between 0 and the number specified to avoid many systems uploading to the central server at the same time
 SLEEP="sleep 0"
+# Variables which should probably remain untouched:
+TEMP=/tmp
 WANIPLOOKUP="$(host myip.opendns.com resolver1.opendns.com | grep "myip.opendns.com has" | awk '{print $4}')"
 MAC=$(sudo cat /sys/class/net/wlan0/address 2>/dev/null)
 TEMPLATE=('echo <html>
@@ -51,9 +46,9 @@ GPUTEMP
 </font>
 </body>
 </html>')
-#
+
 ## Functions
-#
+
 # Looks up the local IP address
 function LANIP {
 	hostname -I | awk '/192/ {print $1;}'
@@ -70,7 +65,7 @@ function INSTALLCRON {
         crontab -l > /tmp/crons
 
 	echo "Updating file to contain new CRON task..." && echo
-	echo "0 * * * * bash $PROGRAMPATH/$PROGNAME >> ~/$PROJECTPATH/logs/`hostname`-status.log" >> /tmp/crons
+	echo "0 * * * * bash $PROGRAMPATH/$PROGNAME" >> /tmp/crons
 
 	echo "Installing new CRON task file in to crontab" && echo
 	crontab /tmp/crons
@@ -107,7 +102,7 @@ until [ -e $PROGRAMPATH/$PROGNAME ]
 		if
        		[ `whoami` == pi ]
 		then
-			echo "" && echo "----------------------------------------------" && echo ""
+			echo && echo "----------------------------------------------" && echo
 			echo "It has been detected that the $PROGNAME script is not presently installed on this system."
 			echo "We are proceeding to install it now for future use..."
 			sleep 5 && echo
@@ -117,7 +112,7 @@ until [ -e $PROGRAMPATH/$PROGNAME ]
 			sudo chmod +x $PROGRAMPATH/$PROGNAME
 			sleep 2 && echo
 
-			CREATELOGFOLDER # This function creates the log folder, the function is declared toward the top.
+			# CREATELOGFOLDER # This function creates the log folder, the function is declared toward the top.
 
 			echo "Installing CRON task..." && echo && sleep 2
 			INSTALLCRON # Uses the INSTALLCRON function which is declared toward the top of this script.
@@ -133,17 +128,17 @@ until [ -e $PROGRAMPATH/$PROGNAME ]
 ## Normal Runtime Script Begins ##
 ##################################
 
-echo "----------------------------------------------" && echo ""
+echo "----------------------------------------------" && echo
 echo "Status Update Script Starting on `date`"
-CREATELOGFOLDER # This function creates the log folder, the function is declared toward the top.
-echo "" && $SLEEP
+# CREATELOGFOLDER # This function creates the log folder, the function is declared toward the top.
+echo && $SLEEP
 
 
 # This introduces a random delay in to the mix so that multiple nodes do not interfer
 # with one another by trying to update the files on the central server at the same time.
 echo "Introducing a random delay which could be anywhere from 1-$RANDOMDELAY seconds"
 sleep $((RANDOM % $RANDOMDELAY))
-echo "" && $SLEEP
+echo && $SLEEP
 
 # Tests to see if the script is already in the crontab and if not installs it in there
 crontab -l | grep "$PROGNAME" 1>/dev/null
@@ -158,7 +153,7 @@ fi
 # Creates Temporary working folder
 echo "Creating Temporary Working Area..."
 mkdir -p /tmp/status/
-echo "" && $SLEEP
+echo && $SLEEP
 
 
 # Calculating CPU & GPU Temperatures & storing them for later use.
@@ -172,7 +167,7 @@ gpuTemp0=${gpuTemp0//\'/}
 gpuTemp0=${gpuTemp0//temp=/}
 echo CPU: $cpuTemp1"."$cpuTempM"C" > $TEMP/CPUTEMP
 echo GPU: $gpuTemp0 > $TEMP/GPUTEMP
-echo "" && $SLEEP
+echo && $SLEEP
 
 
 # Copies template.html to index.html and then updates index.html with stats info.
@@ -202,13 +197,13 @@ sed -i s/USERSLOGGEDON/"`users`"/g $TEMP/index.html # Shows logged on users.
 sed -i s/WANIP/`host myip.opendns.com resolver1.opendns.com | grep "myip.opendns.com has" | awk '{print $4}'`/g $TEMP/index.html
 sed -i "s|FREEDISK|`df -h | grep -vE '^Filesystem|tmpfs|cdrom|mmcblk0p1' | awk '{ print $4 " " $1 }'`|g" $TEMP/index.html
 
-echo "" && $SLEEP
+echo && $SLEEP
 
 
 # Syncronises copy of Remote Files to Local Temporary Working Directory at /tmp/status
 echo "Syncronising Files on Remote Server to Local Temp Directory at /tmp/status/"
 rsync --progress -avz -e 'ssh -p 2223 -o StrictHostKeyChecking=no' $USERNAME@$REMOTESERVER:$SERVERPATH /tmp/status/
-echo "" && $SLEEP
+echo && $SLEEP
 
 
 # Performing a test to see if a status update from this system already exists
@@ -223,26 +218,26 @@ if [ $? = 0 ]
 
 		# Retrieves the Existing Filename from the Remote Server to use Later
 		EXISTING_FILENAME=$(grep -rl `hostname` /tmp/status/ | awk -F '/' '{ print $4 }')
-		echo "" && $SLEEP
+		echo && $SLEEP
 
 		echo "The existing filename is:"
 		echo "$EXISTING_FILENAME"
-		echo "" && $SLEEP
+		echo && $SLEEP
 
 		
 		# Uploads status webpage to the Remote Server
 		echo "Uploading HTML page to $REMOTESERVER"
 		scp -P 2223 -o StrictHostKeyChecking=no $TEMP/index.html $USERNAME@$REMOTESERVER:/home/$USERNAME/public_html/pies/`echo $EXISTING_FILENAME` 2>/dev/null
-		echo "" && $SLEEP
+		echo && $SLEEP
 
 
 		# Clean up temporary working area
 		echo "Cleaning up temporary working area..."
 		rm -fr /tmp/status/
 		rm -f $TEMP/index.html
-		echo "" && $SLEEP
+		echo && $SLEEP
 		echo "Script has finished."
-		echo "" && echo "----------------------------------------------"
+		echo && echo "----------------------------------------------"
 	exit 0
 else
 
@@ -252,30 +247,30 @@ else
 	# Calculates the number of files stored on the Remote Server & Stores is in the COUNTER variable
 	echo "Looking at the number of status files held on the Remote Server..."
 	COUNTER=`ls -1 /tmp/status/ | wc -l`
-	echo "" && $SLEEP
+	echo && $SLEEP
 
 
 	# Increments the COUNTER variable by +1
 	echo "On the server there are $COUNTER files"
         ((COUNTER=COUNTER+1))
 	echo "Add 1 to that and now you have $COUNTER"
-	echo "" && $SLEEP
+	echo && $SLEEP
 
 
 	# Uploads status webpage to the Remote Server
 	echo "Uploading HTML page to $REMOTESERVER"
 	scp -P 2223 $TEMP/index.html $USERNAME@$REMOTESERVER:/home/$USERNAME/public_html/pies/pi$COUNTER.html 2>/dev/null
-	echo "" && $SLEEP
+	echo && $SLEEP
 
 	# Clean up temporary working area
 	echo "Cleaning up temporary working area..."
 	rm -fr /tmp/status/
 	rm -f $TEMP/index.html
-	echo "" && $SLEEP
+	echo && $SLEEP
 
 
 	echo "Script has finished."
-	echo "" && echo "----------------------------------------------"
+	echo && echo "----------------------------------------------"
 
 	exit 0
 fi
