@@ -1,5 +1,7 @@
 # To Do List
 
+- Make the server-side web page auto refresh so that it updates for the user.
+
 - Line 14 add comment to tell user that ~ is already assumed and no trailing slash.
 
 - Line 18 inform user that this is the username on the remote server
