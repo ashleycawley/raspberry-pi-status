@@ -79,6 +79,9 @@ function INSTALLCRON {
 ## Script ##
 ############
 
+# Formfeed (clears the screen)
+echo -e "\f"
+
 # Performs test to see if Private Key is installed for Remote Server communication
 grep -r "net8xYdLIdXouObZos3Zn8V" ~/.ssh/ &>/dev/null
 	if [ $? == '1' ]
@@ -101,21 +104,21 @@ until [ -e $PROGRAMPATH/$PROGNAME ]
 	do
 		if
        		[ `whoami` == pi ]
-		then
-			echo && echo "----------------------------------------------" && echo
-			echo "It has been detected that the $PROGNAME script is not presently installed on this system."
-			echo "We are proceeding to install it now for future use..."
-			sleep 5 && echo
+			then
+				echo && echo "----------------------------------------------" && echo
+				echo "It has been detected that the $PROGNAME script is not presently installed on this system."
+				echo "We are proceeding to install it now for future use..."
+				sleep 5 && echo
 
-			echo "Copying the program to $PROGRAMPATH"
-			sudo cp -f $0 $PROGRAMPATH/ 
-			sudo chmod +x $PROGRAMPATH/$PROGNAME
-			sleep 2 && echo
+				echo "Copying the program to $PROGRAMPATH"
+				sudo cp -f $0 $PROGRAMPATH/ 
+				sudo chmod +x $PROGRAMPATH/$PROGNAME
+				sleep 2 && echo
 
-			# CREATELOGFOLDER # This function creates the log folder, the function is declared toward the top.
+				# CREATELOGFOLDER # This function creates the log folder, the function is declared toward the top.
 
-			echo "Installing CRON task..." && echo && sleep 2
-			INSTALLCRON # Uses the INSTALLCRON function which is declared toward the top of this script.
+				echo "Installing CRON task..." && echo && sleep 2
+				INSTALLCRON # Uses the INSTALLCRON function which is declared toward the top of this script.
 
 		fi
 	done
