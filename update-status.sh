@@ -13,7 +13,7 @@ RANDOMDELAY=30 # Introduces a random delay between 0 and the number specified to
 SLEEP="sleep 0"
 # Variables which should probably remain untouched:
 TEMP=/tmp
-WANIPLOOKUP="$(host myip.opendns.com resolver1.opendns.com | grep "myip.opendns.com has" | awk '{print $4}')"
+WANIPLOOKUP="$(curl -s http://whatismyip.akamai.com/)"
 MAC=$(sudo cat /sys/class/net/wlan0/address 2>/dev/null)
 TEMPLATE=('echo <html>
 <head>
