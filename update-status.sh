@@ -202,7 +202,7 @@ echo && $SLEEP
 
 # Syncronises copy of Remote Files to Local Temporary Working Directory at /tmp/status
 echo "Syncronising Files on Remote Server to Local Temp Directory at /tmp/status/"
-rsync --progress -avz -e 'ssh -p 2223 -o StrictHostKeyChecking=no' $USERNAME@$REMOTESERVER:$SERVERPATH /tmp/status/
+rsync --progress -avz -e 'ssh -p 2223 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' $USERNAME@$REMOTESERVER:$SERVERPATH /tmp/status/
 echo && $SLEEP
 
 
@@ -227,7 +227,7 @@ if [ $? = 0 ]
 		
 		# Uploads status webpage to the Remote Server
 		echo "Uploading HTML page to $REMOTESERVER"
-		scp -P 2223 -o StrictHostKeyChecking=no $TEMP/index.html $USERNAME@$REMOTESERVER:/home/$USERNAME/public_html/pies/`echo $EXISTING_FILENAME` 2>/dev/null
+		scp -P 2223 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $TEMP/index.html $USERNAME@$REMOTESERVER:/home/$USERNAME/public_html/pies/`echo $EXISTING_FILENAME` 2>/dev/null
 		echo && $SLEEP
 
 
@@ -259,7 +259,7 @@ else
 
 	# Uploads status webpage to the Remote Server
 	echo "Uploading HTML page to $REMOTESERVER"
-	scp -P 2223 $TEMP/index.html $USERNAME@$REMOTESERVER:/home/$USERNAME/public_html/pies/pi$COUNTER.html 2>/dev/null
+	scp -P 2223 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $TEMP/index.html $USERNAME@$REMOTESERVER:/home/$USERNAME/public_html/pies/pi$COUNTER.html 2>/dev/null
 	echo && $SLEEP
 
 	# Clean up temporary working area
