@@ -11,6 +11,8 @@ PROGRAMPATH=/usr/local/bin # The location of where the program is installed (it 
 PROGNAME=update-status.sh # The name of the script, update as required if you rename it
 RANDOMDELAY=30 # Introduces a random delay between 0 and the number specified to avoid many systems uploading to the central server at the same time
 SLEEP="sleep 0"
+SSHKEY=(`grep -l -r "net8xYdLIdXouObZos3Zn8V" ~/.ssh/`)
+
 # Variables which should probably remain untouched:
 TEMP=/tmp
 WANIPLOOKUP="$(curl -s http://whatismyip.akamai.com/)"
@@ -74,6 +76,12 @@ function INSTALLCRON {
 	rm /tmp/crons
 }
 
+# Initiates SSH Key into memory
+function INITIATE_SSH_KEY {
+	eval $(ssh-agent)
+	ssh-add $SSHKEY
+}
+
 
 ############
 ## Script ##
@@ -91,6 +99,8 @@ grep -r "net8xYdLIdXouObZos3Zn8V" ~/.ssh/ &>/dev/null
 			exit 1
 	fi
 
+# Initiates SSH Key into memory
+INITIATE_SSH_KEY
 
 ###############################################################################################
 # This is my Installer Sub-Script, the above performs a test to see if the program is already #
