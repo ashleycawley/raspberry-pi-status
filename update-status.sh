@@ -212,7 +212,7 @@ echo && $SLEEP
 
 # Syncronises copy of Remote Files to Local Temporary Working Directory at /tmp/status
 echo "Syncronising Files on Remote Server to Local Temp Directory at /tmp/status/"
-rsync --progress -avz -e 'ssh -p 2223 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' $USERNAME@$REMOTESERVER:$SERVERPATH /tmp/status/
+rsync --progress -av -e 'ssh -p 2223 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null' $USERNAME@$REMOTESERVER:$SERVERPATH /tmp/status/
 echo && $SLEEP
 
 
